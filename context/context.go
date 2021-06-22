@@ -1,31 +1,21 @@
 package context
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 )
 
 type Store interface {
-	Fetch() string
-	Cancel()
+	Fetch(ctx context.Context) (string, error)
 }
 
 func Server(store Store) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		// context
-		ctx := r.Context()
-		// channel for store fetching data
-		data := make(chan string, 1)
-		// fetch data by another goroutine
-		go func() {
-			data <- store.Fetch()
-		}()
-		// fetching data or cancel call
-		select {
-		case d := <-data:
-			fmt.Fprint(w, d)
-		case <-ctx.Done():
-			store.Cancel()
+		data, err := store.Fetch(r.Context())
+		if err != nil {
+			return // TODO: log error however you like
 		}
+		fmt.Fprint(w, data)
 	}
 }
