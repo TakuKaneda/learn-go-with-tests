@@ -4,8 +4,7 @@ import (
 	"os"
 	"time"
 
-	"learn-go-with-tests/clockface"
-	// "github.com/quii/learn-go-with-tests/math/clockface" // REPLACE THIS!
+	"github.com/TakuKaneda/learn-go-with-tests/clockface"
 )
 
 func main() {
