@@ -17,6 +17,8 @@ type InMemoryPlayerStore struct {
 	lock sync.RWMutex
 }
 
+var _ PlayerStore = (*InMemoryPlayerStore)(nil)
+
 // RecordWin will record a player's win.
 func (i *InMemoryPlayerStore) RecordWin(name string) {
 	i.lock.Lock()
